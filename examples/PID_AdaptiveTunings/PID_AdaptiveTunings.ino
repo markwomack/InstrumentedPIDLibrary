@@ -16,8 +16,8 @@
 
 // Define Variables we'll be connecting to
 double setpoint;
-double input;
-double output;
+double pidInput;
+double pidOutput;
 
 // Define the aggressive and conservative Tuning Parameters
 double aggKp=4;
@@ -32,18 +32,18 @@ InstrumentedPID myPID(consKp, consKi, consKd, DIRECT);
 
 void setup() {
   //initialize the variables we're linked to
-  input = analogRead(PIN_INPUT);
+  pidInput = analogRead(PIN_INPUT);
   setpoint = 100;
 
   //turn the PID on
-  myPID.start(input, output);
+  myPID.start(pidInput, pidOutput);
 }
 
 void loop()
 {
-  input = analogRead(PIN_INPUT);
+  pidInput = analogRead(PIN_INPUT);
 
-  double gap = abs(setpoint - input); //distance away from setpoint
+  double gap = abs(setpoint - pidInput); //distance away from setpoint
   if (gap < 10) {
     //we're close to setpoint, use conservative tuning parameters
     myPID.setTunings(consKp, consKi, consKd);
@@ -52,6 +52,6 @@ void loop()
      myPID.setTunings(aggKp, aggKi, aggKd);
   }
 
-  myPID.compute(input, setpoint, &output);
-  analogWrite(PIN_OUTPUT, output);
+  myPID.compute(pidInput, setpoint, &pidOutput);
+  analogWrite(PIN_OUTPUT, pidOutput);
 }

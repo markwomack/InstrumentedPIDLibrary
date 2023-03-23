@@ -10,8 +10,8 @@
 
 // Define Variables we'll be connecting to
 double setpoint;
-double input;
-double output;
+double pidInput;
+double pidOutput;
 
 // Specify the links and initial tuning parameters
 double Kp=2;
@@ -22,15 +22,15 @@ InstrumentedPID myPID(Kp, Ki, Kd, DIRECT);
 
 void setup() {
   // Initialize the variables we're linked to
-  input = analogRead(PIN_INPUT);
+  pidInput = analogRead(PIN_INPUT);
   setpoint = 100;
 
   // Turn the PID on
-  myPID.start(input, output);
+  myPID.start(pidInput, pidOutput);
 }
 
 void loop() {
-  input = analogRead(PIN_INPUT);
-  myPID.compute(input, setpoint, &output);
-  analogWrite(PIN_OUTPUT, output);
+  pidInput = analogRead(PIN_INPUT);
+  myPID.compute(pidInput, setpoint, &pidOutput);
+  analogWrite(PIN_OUTPUT, pidOutput);
 }

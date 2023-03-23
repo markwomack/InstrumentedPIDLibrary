@@ -40,7 +40,7 @@ class InstrumentedPID {
     // called every time loop() cycles. ON/OFF and
     // calculation frequency can be set using SetMode
     // SetSampleTime respectively
-    bool compute(double input, double setpoint, double* output);
+    bool compute(double input, double setpoint, double* returnOutput);
 
     // Clamps the output to a specific range. 0-255 by default, but
     // it's likely the user will want to change this depending on
@@ -82,17 +82,24 @@ class InstrumentedPID {
     double _Ki;  // * (I)ntegral Tuning Parameter
     double _Kd;  // * (D)erivative Tuning Parameter
 
+    bool _isRunning;    
     Direction _direction;
-    PIDMode _pidMode;
-                     
-    bool _isRunning;             	  
-    unsigned long _lastTime;
-    double _outputSum;
-    double _lastInput;
-
+    PIDMode _pidMode;   
     unsigned long _sampleTime;
     double _outMin;
-    double _outMax;
+    double _outMax;      	  
+    double _outputSum;
+
+    // Instrumentation    	  
+    unsigned long _lastTime;
+    double _lastInput;
+    double _lastKiValue;
+    double _lastKpValue;
+    double _lastKdValue;
+    double _lastError;
+    double _lastDiffInput;
+    double _lastSetpoint;
+    double _lastOutputSum;
 };
 
 #endif // PID_v1_h

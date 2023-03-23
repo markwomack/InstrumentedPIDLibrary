@@ -10,8 +10,8 @@
 
 // Define Variables we'll be connecting to
 double setpoint;
-double input;
-double output;
+double pidInput;
+double pidOutput;
 
 // Specify the links and initial tuning parameters
 //P_ON_M specifies that Proportional on Measurement be used
@@ -20,15 +20,15 @@ InstrumentedPID myPID(2, 5, 1, P_ON_M, DIRECT);
 
 void setup() {
   //initialize the variables we're linked to
-  input = analogRead(0);
+  pidInput = analogRead(0);
   setpoint = 100;
 
   //turn the PID on
-  myPID.start(input, output);
+  myPID.start(pidInput, pidOutput);
 }
 
 void loop() {
-  input = analogRead(0);
-  myPID.compute(input, setpoint, &output);
-  analogWrite(3, output);
+  pidInput = analogRead(0);
+  myPID.compute(pidInput, setpoint, &pidOutput);
+  analogWrite(3, pidOutput);
 }

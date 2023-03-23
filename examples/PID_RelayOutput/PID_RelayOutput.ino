@@ -21,8 +21,8 @@
 
 // Define Variables we'll be connecting to
 double setpoint;
-double input;
-double output;
+double pidInput;
+double pidOutput;
 
 // Specify the links and initial tuning parameters
 double Kp=2;
@@ -43,12 +43,12 @@ void setup() {
   myPID.setOutputLimits(0, windowSize);
 
   //turn the PID on
-  myPID.start(input, output);
+  myPID.start(pidInput, pidOutput);
 }
 
 void loop() {
-  input = analogRead(PIN_INPUT);
-  myPID.compute(input, setpoint, &output);
+  pidInput = analogRead(PIN_INPUT);
+  myPID.compute(pidInput, setpoint, &pidOutput);
 
   /************************************************
    * turn the output pin on/off based on pid output
@@ -58,7 +58,7 @@ void loop() {
     windowStartTime += windowSize;
   }
   
-  if (output < (millis() - windowStartTime)) {
+  if (pidOutput < (millis() - windowStartTime)) {
     digitalWrite(RELAY_PIN, HIGH);
   } else {
     digitalWrite(RELAY_PIN, LOW);

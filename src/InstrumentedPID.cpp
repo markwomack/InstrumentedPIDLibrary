@@ -57,7 +57,7 @@ void InstrumentedPID::stop() {
  * itself whether a new pid Output needs to be computed.  returns true when
  * the output is computed, false when nothing has been done.
  */
-bool InstrumentedPID::compute(double input, double setpoint, double* output) {
+bool InstrumentedPID::compute(double input, double setpoint, double* returnOutput) {
 
    if (!_isRunning) {
      return false;
@@ -69,29 +69,45 @@ bool InstrumentedPID::compute(double input, double setpoint, double* output) {
    if (timeChange >= _sampleTime) {
      // Compute all the working error variables
      double error = setpoint - input;
-     double dInput = (input - _lastInput);
-     _outputSum += (_Ki * error);
+     double diffInput = (input - _lastInput);
+     
+     double KiValue = _Ki * error;
+     double KpValue = (_pidMode == P_ON_E) ? _Kp * error : -(_Kp * diffInput);
+     double KdValue = -(_Kd * diffInput);
+     
+     // Add the Integral value
+     _outputSum += KiValue;
 
-     // Add Proportional on Measurement, if P_ON_M is specified
+     // Add Proportional on Measurement value, if P_ON_M is specified
      if (_pidMode == P_ON_M) {
-       // Add Proportional on Measurement, if P_ON_M is specified
-       _outputSum -= _Kp * dInput;
-     } else {
-       // Add Proportional on Error, if P_ON_E is specified
-       _outputSum += _Kp * error;
+       _outputSum += KpValue;
      }
 
      _outputSum = max(_outMin, min(_outputSum, _outMax));
 
-     // Compute Rest of PID Output
-     _outputSum -= _Kd * dInput;
+     // Add Proportional on Error value, if P_ON_E is specified
+     if (_pidMode == P_ON_E) {
+       _outputSum += KpValue;
+     }
+     
+     // Add the Derivative value
+     _outputSum += KdValue;
      
      // Return the output value
-     *output = max(_outMin, min(_outputSum, _outMax));
+     *returnOutput = max(_outMin, min(_outputSum, _outMax));
 
      // Remember some variables for next time
      _lastInput = input;
      _lastTime = now;
+     
+     // Remember some values for instrumentation calls
+     _lastKiValue = KiValue;
+     _lastKpValue = KpValue;
+     _lastKdValue = KdValue;
+     _lastError = error;
+     _lastDiffInput = diffInput;
+     _lastSetpoint = setpoint;
+     _lastOutputSum = _outputSum;
      return true;
   }
 
