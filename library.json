@@ -1,0 +1,26 @@
+{
+  "name": "InstrumentedPID",
+  "keywords": "PID, controller, signal",
+  "description": "A PID controller seeks to keep some input variable close to a desired setpoint by adjusting an output. The way in which it does this can be 'tuned' by adjusting three parameters (P,I,D). This version provides instrumentation of the inner values used to calculate the value so that they can be visualized through graphs.",
+  "url": "https://github.com/markwomack/InstrumentedPIDLibrary",
+  "include": "InstrumentedPID",
+  "authors":
+  [
+    {
+      "name": "Mark Womack",
+      "url": "https://github.com/markwomack",
+      "maintainer": true
+    },
+    {
+      "name": "Brett Beauregard"
+    }
+  ],
+  "repository":
+  {
+    "type": "git",
+    "url": "https://github.com/markwomack/InstrumentedPIDLibrary"
+  },
+  "homepage": "https://github.com/markwomack/InstrumentedPIDLibrary",
+  "version": "0.0.1",
+  "frameworks": "arduino"
+}
