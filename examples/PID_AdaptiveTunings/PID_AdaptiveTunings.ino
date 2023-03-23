@@ -9,7 +9,7 @@
  * Parameters when we're farther away.
  ********************************************************/
 
-#include <PID_v1.h>
+#include <InstrumentedPID.h>
 
 #define PIN_INPUT 0
 #define PIN_OUTPUT 3
@@ -28,7 +28,7 @@ double consKi=0.05;
 double consKd=0.25;
 
 //Specify the links and initial tuning parameters
-PID myPID(&input, &output, &setpoint, consKp, consKi, consKd, DIRECT);
+InstrumentedPID myPID(consKp, consKi, consKd, DIRECT);
 
 void setup() {
   //initialize the variables we're linked to
@@ -36,7 +36,7 @@ void setup() {
   setpoint = 100;
 
   //turn the PID on
-  myPID.setMode(AUTOMATIC);
+  myPID.start(input, output);
 }
 
 void loop()
@@ -52,6 +52,6 @@ void loop()
      myPID.setTunings(aggKp, aggKi, aggKd);
   }
 
-  myPID.compute();
+  myPID.compute(input, setpoint, &output);
   analogWrite(PIN_OUTPUT, output);
 }

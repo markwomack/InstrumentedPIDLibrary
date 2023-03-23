@@ -14,7 +14,7 @@
  * window being "Relay Off Time"
  ********************************************************/
 
-#include <PID_v1.h>
+#include <InstrumentedPID.h>
 
 #define PIN_INPUT 0
 #define RELAY_PIN 6
@@ -28,7 +28,7 @@ double output;
 double Kp=2;
 double Ki=5;
 double Kd=1;
-PID myPID(&input, &output, &setpoint, Kp, Ki, Kd, DIRECT);
+InstrumentedPID myPID(Kp, Ki, Kd, DIRECT);
 
 unsigned long windowSize = 5000;
 unsigned long windowStartTime;
@@ -43,12 +43,12 @@ void setup() {
   myPID.setOutputLimits(0, windowSize);
 
   //turn the PID on
-  myPID.setMode(AUTOMATIC);
+  myPID.start(input, output);
 }
 
 void loop() {
   input = analogRead(PIN_INPUT);
-  myPID.compute();
+  myPID.compute(input, setpoint, &output);
 
   /************************************************
    * turn the output pin on/off based on pid output
