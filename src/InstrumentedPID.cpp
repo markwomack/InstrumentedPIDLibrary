@@ -206,3 +206,16 @@ bool InstrumentedPID::isRunning(){ return _isRunning; }
 PIDMode InstrumentedPID::getPIDMode(){ return _pidMode; }
 Direction InstrumentedPID::getDirection(){ return _direction; }
 
+
+void InstrumentedPID::getLastPIDState(JsonDocument& jsonDoc) {
+  jsonDoc["time"] = _lastTime;
+  jsonDoc["input"] = _lastInput;
+  jsonDoc["error"] = _lastError;
+  jsonDoc["diffInput"] = _lastDiffInput;
+  jsonDoc["Ki"] = _lastKiValue;
+  jsonDoc["Kp"] = _lastKpValue;
+  jsonDoc["Kd"] = _lastKdValue;
+  jsonDoc["setpoint"] = _lastSetpoint;
+  jsonDoc["output"] = _lastOutputSum;
+}
+

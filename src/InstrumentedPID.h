@@ -11,6 +11,8 @@
 #ifndef INSTRUMENTED_PID_H
 #define INSTRUMENTED_PID_H
 
+#include <ArduinoJson.h>
+
 enum Direction {
   DIRECT = 0,
   REVERSE = 1
@@ -39,7 +41,8 @@ class InstrumentedPID {
     // Performs the PID calculation. It should be
     // called every time loop() cycles. ON/OFF and
     // calculation frequency can be set using SetMode
-    // SetSampleTime respectively
+    // SetSampleTime respectively. Returns true if a
+    // new returnOutput value was computed.
     bool compute(double input, double setpoint, double* returnOutput);
 
     // Clamps the output to a specific range. 0-255 by default, but
@@ -70,6 +73,7 @@ class InstrumentedPID {
     bool isRunning();
     PIDMode getPIDMode();
     Direction getDirection();
+    void getLastPIDState(JsonDocument& jsonDoc);
 
   private:
 
