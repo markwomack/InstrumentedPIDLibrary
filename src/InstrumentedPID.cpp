@@ -16,7 +16,7 @@
  * reliable defaults, so we need to have the user set them.
  */
 InstrumentedPID::InstrumentedPID(double Kp, double Ki, double Kd,
-    PIDMode pidMode, Direction direction) {
+    PIDMode pidMode, PIDDirection direction) {
   _isRunning = false;
 
   // Default output limit corresponds to the arduino pwm limits
@@ -35,7 +35,7 @@ InstrumentedPID::InstrumentedPID(double Kp, double Ki, double Kd,
  * to use Proportional on Error without explicitly saying so
  */
 InstrumentedPID::InstrumentedPID(double Kp, double Ki, double Kd,
-    Direction direction):InstrumentedPID::InstrumentedPID(Kp, Ki, Kd,
+    PIDDirection direction):InstrumentedPID::InstrumentedPID(Kp, Ki, Kd,
       P_ON_E, direction) {
   // Nothing else to be done
 }
@@ -185,7 +185,7 @@ void InstrumentedPID::setOutputLimits(double outputMin, double outputMax)
  * know which one, because otherwise we may increase the output when we should
  * be decreasing.  This is called from the constructor.
  */
-void InstrumentedPID::setDirection(Direction direction)
+void InstrumentedPID::setDirection(PIDDirection direction)
 {
    if (_isRunning && direction != _direction) {
     _Kp = (0 - _Kp);
@@ -204,7 +204,7 @@ double InstrumentedPID::getKi(){ return  _dispKi;}
 double InstrumentedPID::getKd(){ return  _dispKd;}
 bool InstrumentedPID::isRunning(){ return _isRunning; }
 PIDMode InstrumentedPID::getPIDMode(){ return _pidMode; }
-Direction InstrumentedPID::getDirection(){ return _direction; }
+PIDDirection InstrumentedPID::getDirection(){ return _direction; }
 
 
 void InstrumentedPID::getLastPIDState(JsonDocument& jsonDoc) {

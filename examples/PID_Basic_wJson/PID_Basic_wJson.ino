@@ -42,5 +42,6 @@ void loop() {
     myPID.getLastPIDState(jsonDoc);
     serializeJsonPretty(jsonDoc, Serial);
     Serial.println();
+    jsonDoc.clear();
   }
 }

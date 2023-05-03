@@ -13,7 +13,7 @@
 
 #include <ArduinoJson.h>
 
-enum Direction {
+enum PIDDirection {
   DIRECT = 0,
   REVERSE = 1
 };
@@ -27,10 +27,10 @@ class InstrumentedPID {
   public:
 
     // Constructor with initial tuning parameters, pidMode, and direction.
-    InstrumentedPID(double Kp, double Ki, double Kd, PIDMode pidMode, Direction direction);                                          
+    InstrumentedPID(double Kp, double Ki, double Kd, PIDMode pidMode, PIDDirection direction);                                          
 
     // Constructor with initial tuning parameters and direction.
-    InstrumentedPID(double Kp, double Ki, double Kd, Direction direction);
+    InstrumentedPID(double Kp, double Ki, double Kd, PIDDirection direction);
     
     // Starts the PID so it can start computing.
     void start(double initialInput, double initialOutput);
@@ -61,7 +61,7 @@ class InstrumentedPID {
     // means the output will increase when error is positive. REVERSE
     // means the opposite.  it's very unlikely that this will be needed
     // once it is set in the constructor.
-    void setDirection(Direction direction);
+    void setDirection(PIDDirection direction);
     
     // Sets the frequency, in milliseconds, with which 
     // the PID calculation is performed. Default is 100.
@@ -72,7 +72,7 @@ class InstrumentedPID {
     double getKd();
     bool isRunning();
     PIDMode getPIDMode();
-    Direction getDirection();
+    PIDDirection getDirection();
     void getLastPIDState(JsonDocument& jsonDoc);
 
   private:
@@ -87,7 +87,7 @@ class InstrumentedPID {
     double _Kd;  // * (D)erivative Tuning Parameter
 
     bool _isRunning;    
-    Direction _direction;
+    PIDDirection _direction;
     PIDMode _pidMode;   
     unsigned long _sampleTime;
     double _outMin;
