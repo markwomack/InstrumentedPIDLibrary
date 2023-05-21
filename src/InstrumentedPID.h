@@ -106,5 +106,5 @@ class InstrumentedPID {
     double _lastOutputSum;
 };
 
-#endif // PID_v1_h
+#endif // INSTRUMENTED_PID_H
 
